@@ -4,7 +4,6 @@ from discord import (
     User,
     Embed,
     AllowedMentions,
-    InvalidArgument,
     Guild,
     NotFound,
     Member,
@@ -124,14 +123,14 @@ class Interaction:
             data["content"] = str(content)
 
         if embed is not None and embeds is not None:
-            raise InvalidArgument("cannot pass both embed and embeds parameter")
+            raise ValueError("cannot pass both embed and embeds parameter")
 
         if embed is not None:
             data["embeds"] = [embed.to_dict()]
 
         if embeds is not None:
             if len(embeds) > 10:
-                raise InvalidArgument("embeds parameter must be a list of up to 10 elements")
+                raise ValueError("embeds parameter must be a list of up to 10 elements")
             data["embeds"] = [embed.to_dict() for embed in embeds]
 
         if suppress is not None:
@@ -156,10 +155,10 @@ class Interaction:
             data = {"type": type, "data": data}
 
         if file is not None and files is not None:
-            raise InvalidArgument("cannot pass both file and files parameter to send()")
+            raise ValueError("cannot pass both file and files parameter to send()")
         elif files is not None:
             if len(files) > 10:
-                raise InvalidArgument("files parameter must be a list of up to 10 elements")
+                raise ValueError("files parameter must be a list of up to 10 elements")
         if file is not None:
             files = [file]
 
