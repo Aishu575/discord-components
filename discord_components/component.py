@@ -1,6 +1,6 @@
 from typing import Optional, Union, List, Iterable
 
-from discord import PartialEmoji, Emoji, InvalidArgument
+from discord import PartialEmoji, Emoji
 
 from uuid import uuid1
 from enum import IntEnum
@@ -90,7 +90,7 @@ class SelectOption(Component):
     @label.setter
     def label(self, value: str):
         if not len(value):
-            raise InvalidArgument("Label must not be empty.")
+            raise ValueError("Label must not be empty.")
 
         self._label = value
 
@@ -165,7 +165,7 @@ class Select(Component):
         disabled: bool = False,
     ):
         if (not len(options)) or (len(options) > 25):
-            raise InvalidArgument("Options length should be between 1 and 25.")
+            raise ValueError("Options length should be between 1 and 25.")
 
         self._id = id or custom_id or str(uuid1())
         self._options = options
@@ -224,7 +224,7 @@ class Select(Component):
     @options.setter
     def options(self, value: List[SelectOption]):
         if (not len(value)) or (len(value) > 25):
-            raise InvalidArgument("Options length should be between 1 and 25.")
+            raise ValueError("Options length should be between 1 and 25.")
 
         self._options = value
 
@@ -360,30 +360,30 @@ class Button(Component):
     @style.setter
     def style(self, value: int):
         if value == ButtonStyle.URL and self.id:
-            raise InvalidArgument("Both ID and URL are set.")
+            raise ValueError("Both ID and URL are set.")
         if not (1 <= value <= ButtonStyle.URL):
-            raise InvalidArgument(f"Style must be between 1, {ButtonStyle.URL}.")
+            raise ValueError(f"Style must be between 1, {ButtonStyle.URL}.")
 
         self._style = value
 
     @label.setter
     def label(self, value: str):
         if not value and not self.emoji:
-            raise InvalidArgument("Label should not be empty.")
+            raise ValueError("Label should not be empty.")
 
         self._label = value
 
     @url.setter
     def url(self, value: str):
         if value and self.style != ButtonStyle.URL:
-            raise InvalidArgument("Button style is not URL. You shouldn't provide URL.")
+            raise ValueError("Button style is not URL. You shouldn't provide URL.")
 
         self._url = value
 
     @id.setter
     def id(self, value: str):
         if self.style == ButtonStyle.URL:
-            raise InvalidArgument(
+            raise ValueError(
                 "Button style is set to URL. You shouldn't provide ID."
             )
 
@@ -392,7 +392,7 @@ class Button(Component):
     @custom_id.setter
     def custom_id(self, value: str):
         if self.style == ButtonStyle.URL:
-            raise InvalidArgument(
+            raise ValueError(
                 "Button style is set to URL. You shouldn't provide ID."
             )
 
